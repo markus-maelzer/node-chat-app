@@ -1,0 +1,9 @@
+body {
+  margin: 0;
+}
+
+.chat-window {
+  float: right;
+  width: 70%;
+  border: 2px solid #e61c4a;
+}

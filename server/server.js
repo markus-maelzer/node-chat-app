@@ -6,6 +6,8 @@ const io = require('socket.io')(server);
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const fs = require('fs');
+
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3001;
@@ -20,6 +22,19 @@ io.on('connection', (socket) => {
   socket.on('disconnect', (reason) => {
     console.log(`user disconnected ${socket.id}`, reason);
   });
+
+  socket.on('createMessage', (newMessage) => {
+    const { from, text } = newMessage;
+    socket.broadcast.emit('newMessage', {
+      from,
+      text,
+      id: socket.id,
+      createdAt: new Date().getTime(),
+    })
+  })
+
+
+
 
 
 })
