@@ -1,4 +1,4 @@
-var socket = io('http://localhost:3001');
+var socket = io('http://localhost:3000');
 var username = localStorage.getItem('username');
 const form = document.getElementById('form');
 const chatWindow = document.getElementsByClassName('chat-window')[0];
