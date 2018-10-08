@@ -7,7 +7,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const  { generateMessage } = require('./utils/message');
+const  { generateMessage, generateLocationMessage } = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -28,10 +28,14 @@ io.on('connection', (socket) => {
 
   socket.on('createMessage', (newMessage, callback) => {
     const { from, text } = newMessage;
-    socket.broadcast.emit('newMessage',
+    io.emit('newMessage',
       generateMessage(from, text)
     );
     if(typeof callback === 'function') callback('server got it');
+  })
+
+  socket.on('create-location-message', ({ from, latitude, longitude }) => {
+    io.emit('new-location-message', generateLocationMessage(from, latitude, longitude));
   })
 
   socket.on('disconnect', (reason) => {
