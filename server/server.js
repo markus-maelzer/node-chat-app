@@ -1,14 +1,13 @@
-const path = require('path');
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
+const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const fs = require('fs');
-
+const  { generateMessage } = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -19,25 +18,20 @@ app.use(bodyParser.json({type: '*/*'}));
 
 io.on('connection', (socket) => {
   console.log(`a user connected ${socket.id}`);
-  socket.emit('newMessage', {
-    from: 'admin',
-    text: 'Welcome to the chat app',
-    createdAt: new Date().getTime()
-  });
-  socket.broadcast.emit('newMessage', {
-    from: 'admin',
-    text: `${socket.id} just joined`,
-    createdAt: new Date().getTime()
-  })
+  socket.emit('newMessage',
+    generateMessage('admin','Welcome to the chat app')
+  );
 
-  socket.on('createMessage', (newMessage) => {
+  socket.broadcast.emit('newMessage',
+    generateMessage('admin',`${socket.id} just joined`)
+  ),
+
+  socket.on('createMessage', (newMessage, callback) => {
     const { from, text } = newMessage;
-    socket.broadcast.emit('newMessage', {
-      from,
-      text,
-      id: socket.id,
-      createdAt: new Date().getTime(),
-    })
+    socket.broadcast.emit('newMessage',
+      generateMessage(from, text)
+    );
+    if(typeof callback === 'function') callback('server got it');
   })
 
   socket.on('disconnect', (reason) => {

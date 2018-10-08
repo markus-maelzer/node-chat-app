@@ -1,7 +1,7 @@
 var socket = io('http://localhost:3000');
 var username = localStorage.getItem('username');
-const form = document.getElementById('form');
-const chatWindow = document.getElementsByClassName('chat-window')[0];
+const form = document.getElementById('message-form');
+const chatWindow = document.querySelector('#chat-window');
 
 if(!username) {
   username = prompt('Please enter your name');
@@ -17,8 +17,16 @@ socket.on('disconnect', function () {
 })
 
 socket.on('newMessage', function (message) {
-  chatWindow.innerHTML += '<div class="message"><p>'+ message.text +'</p><p>'+ message.from +'</p><p>'+ new Date(message.createdAt) +'</p></div>';
+  chatWindow.appendChild(createMessageNode(message))
 })
+
+function createMessageNode({ text, from, createdAt }) {
+  const el = document.createElement('LI');
+  el.classList.add('message');
+  const t = document.createTextNode(`${from}: ${text}`);
+  el.appendChild(t);
+  return el;
+}
 
 form.addEventListener('submit', function (e) {
   e.preventDefault();
@@ -26,5 +34,7 @@ form.addEventListener('submit', function (e) {
   socket.emit('createMessage', {
     from: username,
     text: document.getElementById('message').value
+  }, (data) => {
+    console.log(data);
   })
 })
