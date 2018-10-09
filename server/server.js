@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     io.emit('newMessage',
       generateMessage(from, text)
     );
-    if(typeof callback === 'function') callback('server got it');
+    if(typeof callback === 'function') callback();
   })
 
   socket.on('create-location-message', ({ from, latitude, longitude }) => {

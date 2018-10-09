@@ -4,18 +4,37 @@
   <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.min.css" type="text/css">
 </head>
 <body>
-<h1>Hello</h1>
-<form id="message-form">
-  <textarea id="message" placeholder="message" name="message" ></textarea>
-  <button id="send">send</button>
-</form>
-<button id="send-location">Send Location</button>
+<div class="chat">
 
-<div id="chat-window">
+  <div class="chat__sidebar">
+    <h3>People</h3>
+    <div id="users"></div>
+  </div>
+
+  <div class="chat__main">
+    <ul id="chat-window" class="chat__messages"></ul>
+
+    <div class="chat__footer">
+      <form id="message-form">
+        <input
+          id="message" name="message"
+          placeholder="message"
+          autofocus
+          autocomplete="off"
+        />
+        <button id="send">send</button>
+      </form>
+      <button id="send-location">Send Location</button>
+    </div>
+  </div>
+
+
 
 </div>
+
 <script src="/socket.io/socket.io.js" type="text/javascript"></script>
 <script src="js/index.js" type="text/javascript"></script>
 </body>

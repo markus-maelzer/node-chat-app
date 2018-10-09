@@ -41,30 +41,39 @@ function createMessageNode({ text, from, createdAt }) {
 
 form.addEventListener('submit', function (e) {
   e.preventDefault();
+  var messageTextbox = document.getElementById('message');
 
   socket.emit('createMessage', {
     from: username,
-    text: document.getElementById('message').value
-  }, (data) => {
-    console.log(data);
+    text: messageTextbox.value
+  }, () => {
+    messageTextbox.value = '';
   })
 })
 
 
 // handle location button
 var locationButton = document.querySelector('#send-location');
+
 locationButton.addEventListener('click', function (e) {
   if(!navigator.geolocation) {
     return alert('Geolocation not supported by your browser :( (better get chrome ;b)');
   }
 
+  locationButton.setAttribute('disabled', 'disabled');
+  locationButton.innerHTML = 'Sending Location...';
+
   navigator.geolocation.getCurrentPosition(function ({coords: { latitude, longitude}}) {
+    locationButton.removeAttribute('disabled');
+    locationButton.innerHTML = 'Send Location';
     socket.emit('create-location-message', {
       from: username,
       latitude,
       longitude
     })
   }, function (err) {
+    locationButton.removeAttribute('disabled');
+    locationButton.innerHTML = 'Send Location';
     console.log(err);
     alert('Unable to fetch location :| (gosh why is this appening >-<)');
   })
