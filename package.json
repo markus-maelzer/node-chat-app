@@ -14,8 +14,9 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.4",
-    "express": "^4.16.2",
+    "express": "^4.16.4",
     "lodash": "^4.17.5",
+    "moment": "^2.22.2",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {

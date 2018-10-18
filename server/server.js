@@ -4,17 +4,16 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 const path = require('path');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const  { generateMessage, generateLocationMessage } = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(express.static(publicPath));
 app.use(cors());
-app.use(bodyParser.json({type: '*/*'}));
+app.use(express.json({type: '*/*'}));
 
 io.on('connection', (socket) => {
   console.log(`a user connected ${socket.id}`);
