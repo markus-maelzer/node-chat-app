@@ -19,11 +19,11 @@ app.use(bodyParser.json({type: '*/*'}));
 io.on('connection', (socket) => {
   console.log(`a user connected ${socket.id}`);
   socket.emit('newMessage',
-    generateMessage('admin','Welcome to the chat app')
+    generateMessage('Admin','Welcome to the chat app')
   );
 
   socket.broadcast.emit('newMessage',
-    generateMessage('admin',`${socket.id} just joined`)
+    generateMessage('Admin',`${socket.id} just joined`)
   ),
 
   socket.on('createMessage', (newMessage, callback) => {

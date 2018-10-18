@@ -32,9 +32,10 @@ socket.on('new-location-message', function ({ from, url, createdAt}) {
 })
 
 function createMessageNode({ text, from, createdAt }) {
+  const formattedTime = moment(createdAt).format('h:mm a')
   const el = document.createElement('LI');
   el.classList.add('message');
-  const t = document.createTextNode(`${from}: ${text}`);
+  const t = document.createTextNode(`${from} ${formattedTime}: ${text}`);
   el.appendChild(t);
   return el;
 }
