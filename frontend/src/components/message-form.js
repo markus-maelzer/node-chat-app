@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class  extends Component {
+import { socketEmit } from '../redux';
+
+const CREATE_MESSAGE = 'create-message';
+
+class MessageForm extends Component {
   state = {
     message: '',
   }
 
   handleSubmit = e => {
     e.preventDefault();
+    this.props.socketEmit(CREATE_MESSAGE, )
   }
 
   handleInput = e => {
@@ -15,6 +21,10 @@ export default class  extends Component {
     this.setState({
       message: value
     });
+  }
+
+  generateMessage = () => {
+
   }
 
   render() {
@@ -35,3 +45,11 @@ export default class  extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ user }) => ({
+  user
+})
+
+export default connect(
+  mapStateToProps, { socketEmit }
+)(MessageForm);
