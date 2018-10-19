@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
-import { socketEmit } from '../redux';
+import { socketEmit, CREATE_MESSAGE } from '../redux';
+import { Button } from './reusable';
 
-const CREATE_MESSAGE = 'create-message';
 
 class MessageForm extends Component {
   state = {
     message: '',
+    locationLoading: false,
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.socketEmit(CREATE_MESSAGE, )
+    const { message } = this.state;
+    if(message.length === 0) return;
+
+    this.props.socketEmit(CREATE_MESSAGE, {
+      from: this.props.user.username,
+      text: message,
+      createdAt: moment().valueOf()
+    }, () => {
+      this.setState({ message: '' });
+    })
   }
+
 
   handleInput = e => {
     e.preventDefault();
@@ -23,24 +35,47 @@ class MessageForm extends Component {
     });
   }
 
-  generateMessage = () => {
-
+  handleLocationButton = () => {
+    if(!navigator.geolocation) {
+      return alert('Geolocation not supported by your browser :( (better get chrome ;b)');
+    }
+    this.setState({
+      locationLoading: true,
+    })
+    navigator.geolocation.getCurrentPosition(({coords: { latitude, longitude}}) => {
+      this.props.socketEmit(CREATE_MESSAGE, {
+        from: this.props.user.username,
+        text: this.state.message,
+        createdAt: moment().valueOf()
+      }, () => {
+        this.setState({
+          message: '',
+          locationLoading: false,
+        });
+      })
+    });
   }
 
   render() {
+    const { locationLoading } = this.state;
     return (
       <React.Fragment>
         <form id="message-form" onSubmit={this.handleSubmit}>
           <input
-            id="message" name="message"
+            name="message"
             placeholder="message"
             autoFocus
             autoComplete="off"
+            value={this.state.message}
             onChange={this.handleInput}
           />
-          <button id="send">send</button>
+          <Button> send</Button>
         </form>
-        <button id="send-location">Send Location</button>
+        <Button
+          onClick={this.handleLocationButton}
+        >
+          {locationLoading ? 'Loading Location' : 'Send Location'}
+        </Button>
       </React.Fragment>
     );
   }

@@ -16,7 +16,7 @@ socket.on('disconnect', function () {
   console.log('Disconnected from server');
 })
 
-socket.on('newMessage', function (message) {
+socket.on('new-message', function (message) {
   chatWindow.appendChild(createMessageNode(message))
 })
 
@@ -43,7 +43,7 @@ form.addEventListener('submit', function (e) {
   e.preventDefault();
   var messageTextbox = document.getElementById('message');
 
-  socket.emit('createMessage', {
+  socket.emit('create-message', {
     from: username,
     text: messageTextbox.value
   }, () => {

@@ -21,20 +21,25 @@ io.on('connection', (socket) => {
     generateMessage('admin','Welcome to the chat app')
   );
 
-  socket.broadcast.emit('newMessage',
+  socket.broadcast.emit('new-message',
     generateMessage('admin',`${socket.id} just joined`)
   ),
 
-  socket.on('createMessage', (newMessage, callback) => {
-    const { from, text } = newMessage;
-    io.emit('newMessage',
-      generateMessage(from, text)
-    );
-    if(typeof callback === 'function') callback();
+  socket.on('create-message', (newMessage, callback) => {
+    const { from, text, createdAt } = newMessage;
+    const message = generateMessage(from, text, createdAt ? createdAt : null);
+console.log(message);
+    io.emit('newMessage', message);
+
+    if(typeof callback === 'function') {
+      console.log(typeof callback);
+      callback();
+    }
+
   })
 
   socket.on('create-location-message', ({ from, latitude, longitude }) => {
-    io.emit('new-location-message', generateLocationMessage(from, latitude, longitude));
+    io.emit('new-location-message', generateLocationMessage(from, latitude, longitude, createdAt));
   })
 
   socket.on('disconnect', (reason) => {
