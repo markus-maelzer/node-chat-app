@@ -1,11 +1,11 @@
 import { socket } from './';
 
-export const socketEmit = (type, data, callback) => {
+export const socketEmit = (type, event, data, callback) => {
   return dispatch => {
     if(typeof callback === 'function')
-      socket.emit(type, data, callback);
+      socket.emit(event, data, callback);
     else
-      socket.emit(type, data);
+      socket.emit(event, data);
     dispatch({
       type,
       data
@@ -15,16 +15,16 @@ export const socketEmit = (type, data, callback) => {
 
 export const socketOn = (type, event) => {
   return dispatch => {
-    this.f = (data) => {
+    var f = (data) => {
       dispatch({
         type,
         data
       })
     }
-    socket.on(event, this.f);
+    socket.on(event, f);
 
-    this.destroy = () => {
-      socket.removeListener(event, this.f);
+    return () => {
+      socket.removeListener(event, f);
     }
   }
 }

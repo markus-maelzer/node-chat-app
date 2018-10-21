@@ -2,27 +2,31 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { socketEmit, CREATE_MESSAGE } from '../redux';
-import { Button } from './reusable';
+import { socketEmit, NEW_MESSAGE } from '../redux';
+import { Button, Input } from './reusable';
 
 
 class MessageForm extends Component {
   state = {
     message: '',
     locationLoading: false,
+    disableButton: false,
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    const { message } = this.state;
-    if(message.length === 0) return;
+    const { message, disableButton } = this.state;
+    if(message.length === 0 || disableButton) return;
+    this.setState({
+      disableButton: true,
+    })
 
-    this.props.socketEmit(CREATE_MESSAGE, {
+    this.props.socketEmit(NEW_MESSAGE, 'create-message', {
       from: this.props.user.username,
       text: message,
       createdAt: moment().valueOf()
     }, () => {
-      this.setState({ message: '' });
+      this.setState({ message: '', disableButton: false });
     })
   }
 
@@ -39,13 +43,17 @@ class MessageForm extends Component {
     if(!navigator.geolocation) {
       return alert('Geolocation not supported by your browser :( (better get chrome ;b)');
     }
+    const { locationLoading } = this.state;
+    if(locationLoading) return;
+
     this.setState({
       locationLoading: true,
     })
-    navigator.geolocation.getCurrentPosition(({coords: { latitude, longitude}}) => {
-      this.props.socketEmit(CREATE_MESSAGE, {
+    navigator.geolocation.getCurrentPosition(({coords: { latitude, longitude }}) => {
+      this.props.socketEmit(NEW_MESSAGE, 'create-location-message', {
         from: this.props.user.username,
-        text: this.state.message,
+        latitude,
+        longitude,
         createdAt: moment().valueOf()
       }, () => {
         this.setState({
@@ -57,11 +65,11 @@ class MessageForm extends Component {
   }
 
   render() {
-    const { locationLoading } = this.state;
+    const { locationLoading, disableButton } = this.state;
     return (
       <React.Fragment>
         <form id="message-form" onSubmit={this.handleSubmit}>
-          <input
+          <Input
             name="message"
             placeholder="message"
             autoFocus
@@ -69,10 +77,11 @@ class MessageForm extends Component {
             value={this.state.message}
             onChange={this.handleInput}
           />
-          <Button> send</Button>
+          <Button>send</Button>
         </form>
         <Button
           onClick={this.handleLocationButton}
+          disableButton={disableButton}
         >
           {locationLoading ? 'Loading Location' : 'Send Location'}
         </Button>

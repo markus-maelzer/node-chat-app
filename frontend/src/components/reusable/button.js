@@ -2,13 +2,15 @@ import React from 'react';
 
 export const Button = ({
   className = '',
-  onClick = false,
+  onClick,
   children,
-  text
+  text,
+  disableButton
 }) => (
   <button
     className={className}
     onClick={onClick}
+    disabled={disableButton}
   >
     {text || children}
   </button>

@@ -38,7 +38,7 @@ console.log(message);
 
   })
 
-  socket.on('create-location-message', ({ from, latitude, longitude }) => {
+  socket.on('create-location-message', ({ from, latitude, longitude, createdAt }) => {
     io.emit('new-location-message', generateLocationMessage(from, latitude, longitude, createdAt));
   })
 

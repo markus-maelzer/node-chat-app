@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { USER, CREATE_MESSAGE } from './';
-import _ from 'lodash';
+import { USER, NEW_MESSAGE } from './';
+// import _ from 'lodash';
 
 const userReducer = (state = {}, action) => {
   switch (action.type) {
@@ -11,10 +11,11 @@ const userReducer = (state = {}, action) => {
       return state;
   }
 }
+
 const messagesReducer = (state = {}, action) => {
   switch (action.type) {
-    case CREATE_MESSAGE:
-      return { ...state, [action.data.createdAt]: action.data};
+    case NEW_MESSAGE:
+      return {...state, [action.data.createdAt]: action.data}
 
     default:
       return state;
