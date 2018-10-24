@@ -25,9 +25,8 @@ class MessageForm extends Component {
       from: this.props.user.username,
       text: message,
       createdAt: moment().valueOf()
-    }, () => {
-      this.setState({ message: '', disableButton: false });
     })
+    this.setState({ message: '', disableButton: false });
   }
 
 

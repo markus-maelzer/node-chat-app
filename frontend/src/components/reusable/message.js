@@ -8,6 +8,12 @@ export const Message = ({
   className = ''
 }) => (
   <li className={`message ${className}`}>
-    {`${from} ${moment(createdAt).format('hh, m a')}: ${text}`}
+    <div className="message__title">
+      <h4>{from}</h4>
+      <span>{moment(createdAt).format('hh, m a')}</span>
+    </div>
+    <div className="message__body">
+      {text}
+    </div>
   </li>
 );
