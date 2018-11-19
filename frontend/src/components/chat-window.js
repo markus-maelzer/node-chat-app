@@ -26,9 +26,14 @@ class ChatWindow extends Component {
     ))
   }
 
+  handleOnScroll = (e) => {
+    console.log(e.target.clientHeight);
+    console.log(e.target.scrollHeight);
+  }
+
   render() {
     return (
-      <ul id="chat-window" className="chat__messages">
+      <ul onScroll={this.handleOnScroll} id="chat-window" className="chat__messages">
         {this.renderMessages()}
       </ul>
     );

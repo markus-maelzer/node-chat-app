@@ -1,0 +1,2 @@
+- add a message type to differanciate location(link)/normal text and so on
+  or actually create sth like a link parser

@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
     const { from, text, createdAt } = newMessage;
     const message = generateMessage(from, text, createdAt ? createdAt : null);
 console.log(message);
-    io.emit('newMessage', message);
+    io.emit('new-message', message);
 
     if(typeof callback === 'function') {
       console.log(typeof callback);
