@@ -18,11 +18,16 @@ app.use(express.json({type: '*/*'}));
 io.on('connection', (socket) => {
   console.log(`a user connected ${socket.id}`);
   socket.emit('newMessage',
-    generateMessage('admin','Welcome to the chat app')
+    generateMessage('Admin','Welcome to the chat app')
   );
 
+<<<<<<< HEAD
   socket.broadcast.emit('new-message',
     generateMessage('admin',`${socket.id} just joined`)
+=======
+  socket.broadcast.emit('newMessage',
+    generateMessage('Admin',`${socket.id} just joined`)
+>>>>>>> master
   ),
 
   socket.on('create-message', (newMessage, callback) => {
