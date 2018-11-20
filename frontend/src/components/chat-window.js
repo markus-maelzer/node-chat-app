@@ -40,10 +40,11 @@ class ChatWindow extends Component {
   handleAutoScroll = (e) => {
     if(!this.chatWindow.current) return;
     const { clientHeight, scrollHeight, scrollTop } = this.chatWindow.current;
-    console.log(this.messageRef);
     if(!this.messageRef || clientHeight >= scrollHeight) return;
-    if(clientHeight + scrollTop +this.messageRef.clientHeight >= scrollHeight) {
-      this.chatWindow.scrollTop = scrollHeight;
+    // messageRef clienteight * 2 because its already rendered and adds its height to scrollHeight
+    if(clientHeight + scrollTop + (this.messageRef.clientHeight * 2) >= scrollHeight) {
+      // this.chatWindow.scrollTop = scrollHeight;
+      this.messageRef.scrollIntoView();
     }
   }
 
