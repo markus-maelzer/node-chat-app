@@ -4,17 +4,16 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 const path = require('path');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const  { generateMessage, generateLocationMessage } = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(express.static(publicPath));
 app.use(cors());
-app.use(bodyParser.json({type: '*/*'}));
+app.use(express.json({type: '*/*'}));
 
 io.on('connection', (socket) => {
   console.log(`a user connected ${socket.id}`);
@@ -22,20 +21,30 @@ io.on('connection', (socket) => {
     generateMessage('Admin','Welcome to the chat app')
   );
 
+<<<<<<< HEAD
+  socket.broadcast.emit('new-message',
+    generateMessage('admin',`${socket.id} just joined`)
+=======
   socket.broadcast.emit('newMessage',
     generateMessage('Admin',`${socket.id} just joined`)
+>>>>>>> master
   ),
 
-  socket.on('createMessage', (newMessage, callback) => {
-    const { from, text } = newMessage;
-    io.emit('newMessage',
-      generateMessage(from, text)
-    );
-    if(typeof callback === 'function') callback();
+  socket.on('create-message', (newMessage, callback) => {
+    const { from, text, createdAt } = newMessage;
+    const message = generateMessage(from, text, createdAt ? createdAt : null);
+console.log(message);
+    io.emit('new-message', message);
+
+    if(typeof callback === 'function') {
+      console.log(typeof callback);
+      callback();
+    }
+
   })
 
-  socket.on('create-location-message', ({ from, latitude, longitude }) => {
-    io.emit('new-location-message', generateLocationMessage(from, latitude, longitude));
+  socket.on('create-location-message', ({ from, latitude, longitude, createdAt }) => {
+    io.emit('new-location-message', generateLocationMessage(from, latitude, longitude, createdAt));
   })
 
   socket.on('disconnect', (reason) => {
