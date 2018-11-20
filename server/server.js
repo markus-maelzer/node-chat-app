@@ -21,19 +21,14 @@ io.on('connection', (socket) => {
     generateMessage('Admin','Welcome to the chat app')
   );
 
-<<<<<<< HEAD
   socket.broadcast.emit('new-message',
     generateMessage('admin',`${socket.id} just joined`)
-=======
-  socket.broadcast.emit('newMessage',
-    generateMessage('Admin',`${socket.id} just joined`)
->>>>>>> master
-  ),
+  );
 
   socket.on('create-message', (newMessage, callback) => {
     const { from, text, createdAt } = newMessage;
     const message = generateMessage(from, text, createdAt ? createdAt : null);
-console.log(message);
+    console.log(message);
     io.emit('new-message', message);
 
     if(typeof callback === 'function') {
