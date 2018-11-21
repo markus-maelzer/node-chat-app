@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { socketEmit, NEW_MESSAGE } from '../redux';
-import { Button, Input } from './reusable';
+import { NEW_MESSAGE } from './types';
+import { socketEmit } from '../../redux';
+import { Button, Input } from '../reusable';
 
 
 class MessageForm extends Component {

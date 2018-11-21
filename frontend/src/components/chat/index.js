@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import ChatSidebar from './components/chat-sidebar';
-import ChatWindow from './components/chat-window';
-import MessageForm from './components/message-form';
+import ChatSidebar from './chat-sidebar';
+import ChatWindow from './chat-window';
+import MessageForm from './message-form';
 
-export default class App extends Component {
+export default class Chat extends Component {
   render() {
     return (
       <div className="chat">

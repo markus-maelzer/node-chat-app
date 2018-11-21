@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { USER, NEW_MESSAGE } from './';
+import { USER } from './';
+import messagesReducer from '../components/chat/reducer';
 // import _ from 'lodash';
 
 const userReducer = (state = {}, action) => {
@@ -11,17 +12,6 @@ const userReducer = (state = {}, action) => {
       return state;
   }
 }
-
-const messagesReducer = (state = {}, action) => {
-  switch (action.type) {
-    case NEW_MESSAGE:
-      return {...state, [action.data.createdAt]: action.data}
-
-    default:
-      return state;
-  }
-}
-
 
 export const rootReducer = combineReducers({
   user: userReducer,

@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { socketOn, NEW_MESSAGE } from '../redux';
-import { Message } from './reusable/message';
+import { NEW_MESSAGE } from './types';
+import { socketOn } from '../../redux';
+
+import { Message } from '../reusable';
 
 
 class ChatWindow extends Component {

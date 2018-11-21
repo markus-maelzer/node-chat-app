@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './scss/index.min.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 
 import { rootReducer as reducer, USER } from './redux';
+import MainRouter from './router.js';
+
 
 const store = createStore(
   reducer,
@@ -35,7 +37,9 @@ function setUserName() {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <MainRouter />
+    </Router>
   </Provider>,
   document.getElementById('root')
 );

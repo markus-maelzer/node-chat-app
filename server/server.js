@@ -17,9 +17,11 @@ app.use(express.json({type: '*/*'}));
 
 io.on('connection', (socket) => {
   console.log(`a user connected ${socket.id}`);
-  socket.emit('newMessage',
-    generateMessage('Admin','Welcome to the chat app')
-  );
+  // socket.on('user-join', (username) => {
+    socket.emit('newMessage',
+      generateMessage('','Welcome to the chat app')
+    );
+  // })
 
   socket.broadcast.emit('new-message',
     generateMessage('admin',`${socket.id} just joined`)
