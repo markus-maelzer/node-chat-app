@@ -8,7 +8,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 
-import { rootReducer as reducer, USER } from './redux';
+import { rootReducer as reducer } from './redux';
 import MainRouter from './router.js';
 
 
@@ -19,21 +19,6 @@ const store = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   )
 );
-setUserName();
-function setUserName() {
-  var username = localStorage.getItem('username');
-  if(!username) {
-    username = prompt('Please enter your name');
-    localStorage.setItem('username', username)
-  }
-  store.dispatch({
-    type: USER,
-    data: {username},
-  })
-
-}
-
-
 
 ReactDOM.render(
   <Provider store={store}>

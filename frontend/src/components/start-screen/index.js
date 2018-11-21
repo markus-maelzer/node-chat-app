@@ -1,16 +1,45 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-export default class StartScreen extends Component {
+import { simpleAction, USER } from '../../redux';
+
+class StartScreen extends Component {
   state = {
-    redirect: false
+    redirect: false,
+    username: localStorage.getItem('username') || '',
+    room: localStorage.getItem('room') || 'test'
+  }
+
+  componentDidUpdate() {
+    if(this.state.redirect || !this.props.user.username) return;
+    this.setState({
+      redirect: true,
+    })
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
+    this.setUser();
+  }
+
+  handleOnChange = e => {
+    var name = e.target.getAttribute('name');
     this.setState({
-      redirect: true,
+      [name]: e.target.value
     })
+  }
+
+  setUser = () => {
+    const { username, room } = this.state;
+    if(!username || !room) return;
+
+    localStorage.setItem('username', username);
+    localStorage.setItem('room', room);
+    this.props.simpleAction(USER, {
+      username,
+      room
+    });
   }
 
   render() {
@@ -24,11 +53,17 @@ export default class StartScreen extends Component {
             </div>
             <div className="form-field">
               <label>Display name</label>
-              <input type="text" name="name" autofocus />
+              <input
+                onChange={this.handleOnChange}
+                type="text" name="username" autoFocus
+              />
             </div>
             <div className="form-field">
-              <label>Display name</label>
-              <input type="text" name="room" />
+              <label>Room</label>
+              <input
+                onChange={this.handleOnChange}
+                type="text" name="room"
+              />
             </div>
             <div className="form-field">
               <button type="submit">Join</button>
@@ -39,3 +74,10 @@ export default class StartScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ user }) => ({ user })
+
+export default connect(
+  mapStateToProps,
+  { simpleAction }
+)(StartScreen);

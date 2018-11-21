@@ -28,3 +28,11 @@ export const socketOn = (type, event) => {
     }
   }
 }
+
+export const simpleAction = (type, data) => {
+  console.log(data);
+  return {
+    type,
+    data
+  }
+}

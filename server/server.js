@@ -6,7 +6,8 @@ const io = require('socket.io')(server);
 const path = require('path');
 const cors = require('cors');
 
-const  { generateMessage, generateLocationMessage } = require('./utils/message');
+const { generateMessage, generateLocationMessage } = require('./utils/message');
+const { isRealString } = require('./utils/validation');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3001;
@@ -17,15 +18,24 @@ app.use(express.json({type: '*/*'}));
 
 io.on('connection', (socket) => {
   console.log(`a user connected ${socket.id}`);
-  // socket.on('user-join', (username) => {
-    socket.emit('newMessage',
-      generateMessage('','Welcome to the chat app')
-    );
-  // })
+  socket.on('join', (user, callback, test) => {
+    if(!isRealString(user.username) || !isRealString(user.room)) {
+      console.log(user, callback);
+      callback('Name and room name are required.');
+      return;
+    }
+    socket.join(user.room);
+    callback();
 
-  socket.broadcast.emit('new-message',
-    generateMessage('admin',`${socket.id} just joined`)
-  );
+    socket.emit('new-message',
+      generateMessage('admin','Welcome to the chat app')
+    );
+    socket.broadcast.to(user.room).emit('new-message',
+      generateMessage('admin',`${user.username} just joined`)
+    );
+  })
+
+
 
   socket.on('create-message', (newMessage, callback) => {
     const { from, text, createdAt } = newMessage;

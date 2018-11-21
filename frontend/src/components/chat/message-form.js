@@ -90,10 +90,6 @@ class MessageForm extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  user
-})
-
 export default connect(
-  mapStateToProps, { socketEmit }
+  null, { socketEmit }
 )(MessageForm);
